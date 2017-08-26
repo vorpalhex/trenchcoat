@@ -1,12 +1,11 @@
-import { resolve } from 'path';
-import semverRegex from 'semver-regex';
+const path = require('path');
+const semverRegex = require('semver-regex');
+const package = require('./package.json');
 
-import { devDependencies } from './package.json';
+const electronVersion = semverRegex().exec(package.dependencies.electron)[0];
 
-const electronVersion = semverRegex().exec(dependencies.electron)[0];
-
-export default {
-  context: resolve(__dirname, '..'),
+module.exports = {
+  context: path.resolve(__dirname, '.'),
   entry: {
     renderer: './src/index.js',
   },
@@ -14,7 +13,7 @@ export default {
     rules: [
       {
         test: /\.js$/,
-        include: resolve(__dirname, '../src'),
+        include: path.resolve(__dirname, './src'),
         loader: 'babel-loader',
         options: {
           babelrc: false,
@@ -28,7 +27,7 @@ export default {
     ],
   },
   output: {
-    path: resolve(__dirname, './client/app'),
+    path: path.resolve(__dirname, './client/app'),
     filename: '[name].js',
   },
   plugins: [],
