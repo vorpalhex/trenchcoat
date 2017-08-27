@@ -34,20 +34,22 @@ class Writing extends Component {
     const { editMode } = this.state;
     return (
       <main className="writing">
-        <button onClick={(e) => this.toggleMode(e)} className="button-black button-small">
-          {editMode ? "Edit" : "Pretty"}
-        </button>
+        <header className="header-actions header-actions-right">
+          <button onClick={(e) => this.toggleMode(e)} className="button-clear">
+            {editMode ? "Pretty" : "Edit"}
+          </button>
+        </header>
 
         {
           (editMode)
             ? <input type="text" value={this.state.title} ref={(input) => this.title = input} onChange={(e) => this.setTitle(e)} />
-            : <h1><big>{this.state.title}</big></h1>
+            : <h1 className="animated fadeIn"><big>{this.state.title}</big></h1>
         }
 
         {
           (editMode)
             ? <textarea value={this.state.body} ref={(input) => this.body = input} onChange={(e) => this.setBody(e)} />
-            : <p>{this.state.body}</p>
+            : <p className="animated fadeIn">{this.state.body}</p>
         }
       </main>
     );

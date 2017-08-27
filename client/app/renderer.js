@@ -22288,26 +22288,45 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 class Journal extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   constructor() {
     super();
+    this.toggleCollapse = this.toggleCollapse.bind(this);
     this.state = {
-      currentEntryId: 2
+      currentEntryId: 2,
+      collapse: false
     };
   }
 
+  toggleCollapse() {
+    console.log('collapse', this.state.collapse);
+    this.setState({
+      collapse: !this.state.collapse
+    });
+  }
+
   render() {
+    const { collapse } = this.state;
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'div',
       { className: 'journal container' },
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'header',
+        { className: 'header-actions header-actions-left' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'button',
+          { className: 'button-collapse button-clear', onClick: () => this.toggleCollapse() },
+          'Collapse'
+        )
+      ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'div',
         { className: 'row' },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
-          { className: 'column column-20' },
+          { className: "column column-entries " + (collapse ? "hide" : "column-20") },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Entries__["a" /* default */], { entries: this.props.entries })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
-          { className: 'column column-80' },
+          { className: "column column-writing collumn-" + (collapse ? "100" : "80") },
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Writing__["a" /* default */], { entry: this.props.entries[this.state.currentEntryId] })
         )
       )
@@ -22417,13 +22436,17 @@ class Writing extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       'main',
       { className: 'writing' },
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'button',
-        { onClick: e => this.toggleMode(e), className: 'button-black button-small' },
-        editMode ? "Edit" : "Pretty"
+        'header',
+        { className: 'header-actions header-actions-right' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'button',
+          { onClick: e => this.toggleMode(e), className: 'button-clear' },
+          editMode ? "Pretty" : "Edit"
+        )
       ),
       editMode ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', value: this.state.title, ref: input => this.title = input, onChange: e => this.setTitle(e) }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'h1',
-        null,
+        { className: 'animated fadeIn' },
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'big',
           null,
@@ -22432,7 +22455,7 @@ class Writing extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
       ),
       editMode ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { value: this.state.body, ref: input => this.body = input, onChange: e => this.setBody(e) }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'p',
-        null,
+        { className: 'animated fadeIn' },
         this.state.body
       )
     );
