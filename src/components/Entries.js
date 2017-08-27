@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import Entry from './Entry';
 
 class Entries extends Component {
   render() {
     return (
-      <ul className="Entries">
-        <li>...list</li>
-        <li>...of</li>
-        <li>...entries</li>
+      <ul className="entries">
+        {
+          Object
+            .keys(this.props.entries)
+            .map(key => <Entry key={key} entry={this.props.entries[key]} />)
+        }
       </ul>
     );
   }
