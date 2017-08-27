@@ -5,6 +5,7 @@ import Entries from './Entries';
 class App extends Component {
   constructor() {
     super();
+    this.appName = "Trenchcoat";
     this.attemptUnlock = this.attemptUnlock.bind(this);
     this.state = {
       locked: true,
@@ -18,10 +19,10 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="app">
         {
           this.state.locked
-            ? <Unlock attemptUnlock={this.attemptUnlock} />
+            ? <Unlock attemptUnlock={this.attemptUnlock} appName={this.appName} />
             : <Entries />
         }
       </div>

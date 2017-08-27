@@ -22133,6 +22133,7 @@ module.exports = ReactDOMInvalidARIAHook;
 class App extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   constructor() {
     super();
+    this.appName = "Trenchcoat";
     this.attemptUnlock = this.attemptUnlock.bind(this);
     this.state = {
       locked: true
@@ -22147,8 +22148,8 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   render() {
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'div',
-      { className: 'App' },
-      this.state.locked ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Unlock__["a" /* default */], { attemptUnlock: this.attemptUnlock }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Entries__["a" /* default */], null)
+      { className: 'app' },
+      this.state.locked ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Unlock__["a" /* default */], { attemptUnlock: this.attemptUnlock, appName: this.appName }) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Entries__["a" /* default */], null)
     );
   }
 }
@@ -22173,22 +22174,26 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   render() {
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       "form",
-      { className: "Unlock", onSubmit: e => this.attemptUnlock(e) },
+      { className: "unlock", onSubmit: e => this.attemptUnlock(e) },
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "h1",
+        "div",
         null,
-        "Unlock"
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "label",
-        null,
-        "Password",
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "text", ref: input => this.password = input })
-      ),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "button",
-        { type: "submit" },
-        "Unlock"
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "h1",
+          null,
+          this.props.appName
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "label",
+          null,
+          "Password",
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", ref: input => this.password = input })
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "button",
+          { type: "submit" },
+          "Unlock"
+        )
       )
     );
   }

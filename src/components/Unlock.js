@@ -8,17 +8,19 @@ class Unlock extends Component {
 
   render() {
     return (
-      <form className="Unlock" onSubmit={(e) => this.attemptUnlock(e)}>
-        <h1>Unlock</h1>
+      <form className="unlock" onSubmit={(e) => this.attemptUnlock(e)}>
+        <div>
+          <h1>{this.props.appName}</h1>
 
-        <label>
-          Password
-          <input type="text" ref={(input) => this.password = input} />
-        </label>
+          <label>
+            Password
+            <input type="password" ref={(input) => this.password = input} />
+          </label>
 
-        <button type="submit">
-          Unlock
-        </button>
+          <button type="submit">
+            Unlock
+          </button>
+        </div>
       </form>
     );
   }
