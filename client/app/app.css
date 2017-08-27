@@ -25,10 +25,28 @@ h1, h2, h3, h4, h5, h6 {
 
 .unlock input[type=password] {
   color: #c5b7ce;
+  width: 18em;
+  display: block;
 }
 
 .unlock :disabled {
   opacity: .5;
+}
+
+.unlock .quality-0 {
+  color: #bf0032;
+}
+
+.unlock .quality-1 {
+  color: #d25c2b;
+}
+
+.unlock .quality-2 {
+  color: #d25c2b;
+}
+
+.unlock .quality-3 {
+  color: #64ca4d;
 }
 
 .entries {
