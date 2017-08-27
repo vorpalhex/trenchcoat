@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 
 class Entry extends Component {
   render() {
+    const { title, date } = this.props.entry;
     return (
-      <li>
-        <strong>{this.props.entry.title}</strong>
+      <li className="animated fadeInDown">
+        <strong>{title}</strong>
         &nbsp;
-        <em>{this.props.entry.date}</em>
+        <em>{date}</em>
       </li>
     );
   }

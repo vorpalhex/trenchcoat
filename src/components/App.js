@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Unlock from './Unlock';
-import Entries from './Entries';
+import Journal from './Journal';
 
 const appName = "Trenchcoat";
 const date = new Date();
@@ -8,6 +8,7 @@ const dummyEntries = Array.from({length: 5}, (e, i) => {
   return {
     title: i,
     date: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`,
+    body: "Foo Bar" + i,
   };
 });
 
@@ -56,14 +57,14 @@ class App extends Component {
     return (
       <div className="app">
         {
+          !locked
+          ? <Journal entries={entries} />
+          : null
+        }
+        {
           !hideUnlocker
             ? <Unlock appName={appName} status={unlockerStatus} attemptUnlock={this.attemptUnlock} />
             : null
-        }
-        {
-          !locked
-          ? <Entries entries={entries} />
-          : null
         }
       </div>
     );
