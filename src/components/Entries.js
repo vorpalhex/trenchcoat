@@ -8,7 +8,7 @@ class Entries extends Component {
         {
           Object
             .keys(this.props.entries)
-            .map(key => <Entry key={key} entry={this.props.entries[key]} />)
+            .map(key => <Entry key={key} entry={this.props.entries[key]} setCurrentEntry={this.props.setCurrentEntry} />)
         }
       </ul>
     );

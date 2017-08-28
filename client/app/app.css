@@ -3,8 +3,17 @@ html, body {
   background: #eee;
 }
 
+html, body, #root, .app,
+.journal, .journal > .row, .journal > .row > .column {
+  height: 100%;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: ‘Times New Roman’, Times, serif;
+}
+
+.hide {
+  display: none !important;
 }
 
 .unlock {
@@ -51,4 +60,37 @@ h1, h2, h3, h4, h5, h6 {
 
 .entries {
   list-style-type: none;
+}
+
+.entry-link {
+  color: #adadad;
+  cursor: pointer;
+  width: 100%;
+  display: inline-block;
+}
+
+.header-actions {
+  position: absolute;
+  top: 0;
+  height: 5rem;
+}
+
+.header-actions-left {
+  left: 1rem;
+}
+
+.header-actions-right {
+  right: 1rem;
+}
+
+.journal > .row > .column {
+  padding-top: 5rem;
+}
+
+.column-writing {
+  background-color: white;
+}
+
+.column-entries, .column-writing {
+  overflow: auto;
 }

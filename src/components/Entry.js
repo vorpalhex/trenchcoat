@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 
 class Entry extends Component {
+  setCurrentEntry() {
+    this.props.setCurrentEntry(this.props.entry.id);
+  }
+
   render() {
+    const { title, date } = this.props.entry;
     return (
-      <li>
-        <strong>{this.props.entry.title}</strong>
-        &nbsp;
-        <em>{this.props.entry.date}</em>
+      <li className="animated fadeInDown">
+        <a className="entry-link" onClick={() => this.setCurrentEntry()}>
+          <strong>{title}</strong>
+          <br />
+          <em>{date}</em>
+        </a>
       </li>
     );
   }
