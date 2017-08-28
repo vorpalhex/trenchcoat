@@ -14,7 +14,13 @@ class Unlock extends Component {
     this.state = {
       passwordQuality: -1,
       passwordHelp: "",
+      creatingNew: false,
     }
+  }
+
+  toggleForm(event) {
+    event.preventDefault();
+    this.setState({ creatingNew: !this.state.creatingNew });
   }
 
   attemptUnlock(event) {
@@ -31,7 +37,8 @@ class Unlock extends Component {
   }
 
   render() {
-    const { status } = this.props;
+    const { status, appName } = this.props;
+    const { creatingNew } = this.state;
     const loading = status === "loading";
     const loaded = status === "loaded";
     const disableInput = loading || loaded;
@@ -41,16 +48,32 @@ class Unlock extends Component {
     return (
       <form className={formClass} onSubmit={(e) => this.attemptUnlock(e)}>
         <div className="animated slideInLeft">
-          <h1>{this.props.appName}</h1>
+          <h1>{appName}</h1>
 
           <label className={"quality-" + this.state.passwordQuality}>
             Password <em>{this.state.passwordHelp}</em>
             <input type="password" ref={(input) => this.password = input} disabled={disableInput} onChange={(e) => this.rankPassword(e)} autoFocus />
           </label>
 
+          {
+            creatingNew
+              ? <label>
+                  Confirm Password
+                  <input type="password" ref={(input) => this.passwordConfirm = input} disabled={disableInput} onChange={(e) => this.rankPassword(e)} />
+                </label>
+              : null
+          }
+
           <button type="submit" disabled={disableSubmit}>
             { loading ? "Loading..." : "Unlock" }
           </button>
+
+          <footer>
+            <br />
+            <a onClick={(e) => this.toggleForm(e)}>
+              { creatingNew ? "Load Existing Journal" : "Create New Journal" }
+            </a>
+          </footer>
         </div>
       </form>
     );

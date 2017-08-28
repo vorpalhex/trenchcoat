@@ -22214,8 +22214,14 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     super();
     this.state = {
       passwordQuality: -1,
-      passwordHelp: ""
+      passwordHelp: "",
+      creatingNew: false
     };
+  }
+
+  toggleForm(event) {
+    event.preventDefault();
+    this.setState({ creatingNew: !this.state.creatingNew });
   }
 
   attemptUnlock(event) {
@@ -22232,7 +22238,8 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   }
 
   render() {
-    const { status } = this.props;
+    const { status, appName } = this.props;
+    const { creatingNew } = this.state;
     const loading = status === "loading";
     const loaded = status === "loaded";
     const disableInput = loading || loaded;
@@ -22248,7 +22255,7 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "h1",
           null,
-          this.props.appName
+          appName
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "label",
@@ -22261,10 +22268,26 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
           ),
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", ref: input => this.password = input, disabled: disableInput, onChange: e => this.rankPassword(e), autoFocus: true })
         ),
+        creatingNew ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "label",
+          null,
+          "Confirm Password",
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", ref: input => this.passwordConfirm = input, disabled: disableInput, onChange: e => this.rankPassword(e) })
+        ) : null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "button",
           { type: "submit", disabled: disableSubmit },
           loading ? "Loading..." : "Unlock"
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "footer",
+          null,
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "a",
+            { onClick: e => this.toggleForm(e) },
+            creatingNew ? "Load Existing Journal" : "Create New Journal"
+          )
         )
       )
     );
