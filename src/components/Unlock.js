@@ -9,9 +9,10 @@ const passwordRankings = [
 const getPasswordRanking = (password) => passwordRankings.reduce((previous, current) => password >= current.length ? current : previous);
 
 class Unlock extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
+      failure: props.status === 'failed',
       passwordQuality: -1,
       passwordHelp: "",
       creatingNew: false,
@@ -19,19 +20,28 @@ class Unlock extends Component {
     }
   }
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      failure: props.status === 'failed',
+    });
+  }
+
   toggleForm(event) {
     event.preventDefault();
     this.setState({ creatingNew: !this.state.creatingNew });
   }
 
-  attemptUnlock(event) {
+  formSubmit(event) {
     event.preventDefault();
-    this.props.attemptUnlock(this.password.value);
+    this.props[this.state.creatingNew ? "newJournal" : "attemptUnlock"](this.password.value);
   }
 
   changedPassword() {
     this.rankPassword();
     this.checkPasswordMatch();
+    this.setState({
+      failure: false,
+    });
   }
 
   rankPassword() {
@@ -48,7 +58,7 @@ class Unlock extends Component {
 
   render() {
     const { status, appName } = this.props;
-    const { creatingNew, passwordQuality, invalidPasswordMatch } = this.state;
+    const { creatingNew, passwordQuality, invalidPasswordMatch, failure } = this.state;
     const loading = status === "loading";
     const loaded = status === "loaded";
     const disableInput = loading || loaded;
@@ -57,12 +67,16 @@ class Unlock extends Component {
     let formClass = "unlock";
     if (loaded) formClass += " animated slideOutRight";
     return (
-      <form className={formClass} onSubmit={(e) => this.attemptUnlock(e)}>
+      <form className={formClass} onSubmit={(e) => this.formSubmit(e)}>
         <div className="animated slideInLeft">
           <h1>{appName}</h1>
 
-          <label className={"quality-" + passwordQuality}>
-            Password <em>{this.state.passwordHelp}</em>
+          <label className={"quality-" + (failure ? "0" : passwordQuality)}>
+            {
+              failure
+                ? <span>Wrong Password :(</span>
+                : <span>Password <em>{this.state.passwordHelp}</em></span>
+            }
             <input type="password" ref={(input) => this.password = input} disabled={disableInput} onChange={(e) => this.changedPassword(e)} autoFocus />
           </label>
 

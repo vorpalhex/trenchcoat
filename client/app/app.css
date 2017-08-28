@@ -94,6 +94,10 @@ a {
   background-color: white;
 }
 
+.writing {
+  padding: 1rem;
+}
+
 .column-entries, .column-writing {
   overflow: auto;
 }

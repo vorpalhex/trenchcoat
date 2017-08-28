@@ -1,34 +1,54 @@
 import React, { Component } from 'react';
+import debounce from 'debounce';
 
 class Editor extends Component {
   constructor(props) {
     super();
+    this.setTitle = this.setTitle.bind(this);
+    this.setBody = this.setBody.bind(this);
+    this.bodyHTML = this.bodyHTML.bind(this);
+    this.saveTitle = debounce(this.saveTitle, 200);
+    this.saveBody = debounce(this.saveBody, 200);
     this.state = {
       editMode: true,
-      title: props.entry.title,
-      body: props.entry.body,
+      title: props.entry.title || '',
+      body: props.entry.body.markdown || '',
     };
   }
 
   componentWillReceiveProps(props) {
-    this.state = {
-      title: props.entry.title,
-      body: props.entry.body,
-    };
+    this.setState({
+      title: props.entry.title || '',
+      body: props.entry.body.markdown || '',
+    });
   }
 
-  setTitle() {
-    const title = this.title.value;
-    // TODO send new title to backend
-    this.setState({title});
-    console.log('Send new title to backend', title);
+  setTitle(event) {
+    const title = event.target.value;
+    this.setState({ title });
+    this.saveTitle(title);
   }
 
-  setBody() {
-    const body = this.body.value;
-    // TODO send new body to backend
-    this.setState({body});
-    console.log('Send new body to backend', body);
+  saveTitle(title) {
+    this.props.entry.title = title;
+    this.props.updateEntry(this.props.entry);
+    this.props.journalUpdated();
+  }
+
+  setBody(event) {
+    const body = event.target.value;
+    this.setState({ body });
+    this.saveBody(body);
+  }
+
+  saveBody(body) {
+    this.props.entry.updateBody(body);
+    this.props.updateEntry(this.props.entry);
+    this.props.journalUpdated();
+  }
+
+  bodyHTML() {
+    return { __html: this.props.entry.body.html };
   }
 
   toggleMode() {
@@ -49,14 +69,14 @@ class Editor extends Component {
 
         {
           (editMode)
-            ? <input type="text" value={this.state.title} ref={(input) => this.title = input} onChange={(e) => this.setTitle(e)} />
+            ? <input type="text" value={this.state.title} ref={(input) => this.title = input} onChange={this.setTitle} />
             : <h1 className="animated fadeIn"><big>{this.state.title}</big></h1>
         }
 
         {
           (editMode)
-            ? <textarea value={this.state.body} ref={(input) => this.body = input} onChange={(e) => this.setBody(e)} />
-            : <p className="animated fadeIn">{this.state.body}</p>
+            ? <textarea value={this.state.body} ref={(input) => this.body = input} onChange={this.setBody} />
+            : <p className="animated fadeIn" dangerouslySetInnerHTML={this.bodyHTML()}></p>
         }
       </main>
     );

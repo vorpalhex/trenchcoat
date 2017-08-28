@@ -8,7 +8,7 @@ class Entry extends Component {
   render() {
     const { title, date } = this.props.entry;
     return (
-      <li className="animated fadeInDown">
+      <li>
         <a className="entry-link" onClick={() => this.setCurrentEntry()}>
           <strong>{title}</strong>
           <br />
