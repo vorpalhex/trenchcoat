@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Writing extends Component {
+class Editor extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -63,4 +63,5 @@ class Writing extends Component {
   }
 }
 
-export default Writing;
+export default Editor;
+

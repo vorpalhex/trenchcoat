@@ -22281,7 +22281,7 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Entries__ = __webpack_require__(186);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Writing__ = __webpack_require__(188);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Editor__ = __webpack_require__(188);
 
 
 
@@ -22336,7 +22336,7 @@ class Journal extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { className: "column column-writing collumn-" + (collapse ? "100" : "80") },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Writing__["a" /* default */], { entry: entry })
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Editor__["a" /* default */], { entry: entry })
         )
       )
     );
@@ -22417,7 +22417,7 @@ class Entry extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 
 
-class Writing extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+class Editor extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   constructor(props) {
     super();
     this.state = {
@@ -22486,7 +22486,7 @@ class Writing extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   }
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (Writing);
+/* harmony default export */ __webpack_exports__["a"] = (Editor);
 
 /***/ })
 /******/ ]);

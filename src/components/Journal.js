@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Entries from './Entries';
-import Writing from './Writing';
+import Editor from './Editor';
 
 class Journal extends Component {
   constructor() {
@@ -41,7 +41,7 @@ class Journal extends Component {
             <Entries entries={entries} setCurrentEntry={this.setCurrentEntry} />
           </div>
           <div className={"column column-writing collumn-" + (collapse ? "100" : "80")}>
-            <Writing entry={entry} />
+            <Editor entry={entry} />
           </div>
         </div>
       </div>
