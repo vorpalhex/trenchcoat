@@ -10,6 +10,13 @@ class Writing extends Component {
     };
   }
 
+  componentWillReceiveProps(props) {
+    this.state = {
+      title: props.entry.title,
+      body: props.entry.body,
+    };
+  }
+
   setTitle() {
     const title = this.title.value;
     // TODO send new title to backend

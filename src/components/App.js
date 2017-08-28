@@ -6,9 +6,10 @@ const appName = "Trenchcoat";
 const date = new Date();
 const dummyEntries = Array.from({length: 5}, (e, i) => {
   return {
-    title: i,
-    date: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`,
-    body: "Foo Bar" + i,
+    id: i,
+    title: "Foo " + i,
+    date: `${date.getMonth()+1}/${date.getDate() + i}/${date.getFullYear()}`,
+    body: "Bar" + i,
   };
 });
 

@@ -6,10 +6,16 @@ class Journal extends Component {
   constructor() {
     super();
     this.toggleCollapse = this.toggleCollapse.bind(this);
+    this.setCurrentEntry = this.setCurrentEntry.bind(this);
     this.state = {
       currentEntryId: 2,
       collapse: false,
     };
+  }
+
+  setCurrentEntry(currentEntryId) {
+    console.log('set current entry', currentEntryId);
+    this.setState({currentEntryId});
   }
 
   toggleCollapse() {
@@ -20,7 +26,9 @@ class Journal extends Component {
   }
 
   render() {
-    const { collapse } = this.state;
+    const { collapse, currentEntryId } = this.state;
+    const { entries } = this.props;
+    const entry = entries[currentEntryId];
     return (
       <div className="journal container">
         <header className="header-actions header-actions-left">
@@ -30,10 +38,10 @@ class Journal extends Component {
         </header>
         <div className="row">
           <div className={"column column-entries " + (collapse ? "hide" : "column-20")}>
-            <Entries entries={this.props.entries} />
+            <Entries entries={entries} setCurrentEntry={this.setCurrentEntry} />
           </div>
           <div className={"column column-writing collumn-" + (collapse ? "100" : "80")}>
-            <Writing entry={this.props.entries[this.state.currentEntryId]} />
+            <Writing entry={entry} />
           </div>
         </div>
       </div>

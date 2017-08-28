@@ -62,6 +62,13 @@ h1, h2, h3, h4, h5, h6 {
   list-style-type: none;
 }
 
+.entry-link {
+  color: #adadad;
+  cursor: pointer;
+  width: 100%;
+  display: inline-block;
+}
+
 .header-actions {
   position: absolute;
   top: 0;

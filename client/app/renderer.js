@@ -22134,9 +22134,10 @@ const appName = "Trenchcoat";
 const date = new Date();
 const dummyEntries = Array.from({ length: 5 }, (e, i) => {
   return {
-    title: i,
-    date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-    body: "Foo Bar" + i
+    id: i,
+    title: "Foo " + i,
+    date: `${date.getMonth() + 1}/${date.getDate() + i}/${date.getFullYear()}`,
+    body: "Bar" + i
   };
 });
 
@@ -22289,10 +22290,16 @@ class Journal extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   constructor() {
     super();
     this.toggleCollapse = this.toggleCollapse.bind(this);
+    this.setCurrentEntry = this.setCurrentEntry.bind(this);
     this.state = {
       currentEntryId: 2,
       collapse: false
     };
+  }
+
+  setCurrentEntry(currentEntryId) {
+    console.log('set current entry', currentEntryId);
+    this.setState({ currentEntryId });
   }
 
   toggleCollapse() {
@@ -22303,7 +22310,9 @@ class Journal extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
   }
 
   render() {
-    const { collapse } = this.state;
+    const { collapse, currentEntryId } = this.state;
+    const { entries } = this.props;
+    const entry = entries[currentEntryId];
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'div',
       { className: 'journal container' },
@@ -22322,12 +22331,12 @@ class Journal extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { className: "column column-entries " + (collapse ? "hide" : "column-20") },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Entries__["a" /* default */], { entries: this.props.entries })
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Entries__["a" /* default */], { entries: entries, setCurrentEntry: this.setCurrentEntry })
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           'div',
           { className: "column column-writing collumn-" + (collapse ? "100" : "80") },
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Writing__["a" /* default */], { entry: this.props.entries[this.state.currentEntryId] })
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__Writing__["a" /* default */], { entry: entry })
         )
       )
     );
@@ -22352,7 +22361,7 @@ class Entries extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'ul',
       { className: 'entries' },
-      Object.keys(this.props.entries).map(key => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Entry__["a" /* default */], { key: key, entry: this.props.entries[key] }))
+      Object.keys(this.props.entries).map(key => __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Entry__["a" /* default */], { key: key, entry: this.props.entries[key], setCurrentEntry: this.props.setCurrentEntry }))
     );
   }
 }
@@ -22369,21 +22378,29 @@ class Entries extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
 
 
 class Entry extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
+  setCurrentEntry() {
+    this.props.setCurrentEntry(this.props.entry.id);
+  }
+
   render() {
     const { title, date } = this.props.entry;
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       "li",
       { className: "animated fadeInDown" },
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "strong",
-        null,
-        title
-      ),
-      "\xA0",
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        "em",
-        null,
-        date
+        "a",
+        { className: "entry-link", onClick: () => this.setCurrentEntry() },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "strong",
+          null,
+          title
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("br", null),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          "em",
+          null,
+          date
+        )
       )
     );
   }
@@ -22405,6 +22422,13 @@ class Writing extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     super();
     this.state = {
       editMode: true,
+      title: props.entry.title,
+      body: props.entry.body
+    };
+  }
+
+  componentWillReceiveProps(props) {
+    this.state = {
       title: props.entry.title,
       body: props.entry.body
     };
