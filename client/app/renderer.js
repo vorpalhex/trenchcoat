@@ -22215,7 +22215,8 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     this.state = {
       passwordQuality: -1,
       passwordHelp: "",
-      creatingNew: false
+      creatingNew: false,
+      invalidPasswordMatch: false
     };
   }
 
@@ -22229,6 +22230,11 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     this.props.attemptUnlock(this.password.value);
   }
 
+  changedPassword() {
+    this.rankPassword();
+    this.checkPasswordMatch();
+  }
+
   rankPassword() {
     const ranking = getPasswordRanking(this.password.value.length);
     this.setState({
@@ -22237,13 +22243,18 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
     });
   }
 
+  checkPasswordMatch() {
+    this.setState({ invalidPasswordMatch: this.state.creatingNew && this.passwordConfirm.value !== this.password.value });
+  }
+
   render() {
     const { status, appName } = this.props;
-    const { creatingNew } = this.state;
+    const { creatingNew, passwordQuality, invalidPasswordMatch } = this.state;
     const loading = status === "loading";
     const loaded = status === "loaded";
     const disableInput = loading || loaded;
-    const disableSubmit = loading || loaded || this.state.passwordQuality <= 0;
+    const disableSubmit = loading || loaded || passwordQuality <= 0 || invalidPasswordMatch;
+    const showConfirmWarning = invalidPasswordMatch && this.passwordConfirm.value.length;
     let formClass = "unlock";
     if (loaded) formClass += " animated slideOutRight";
     return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
@@ -22259,20 +22270,25 @@ class Unlock extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
         ),
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "label",
-          { className: "quality-" + this.state.passwordQuality },
+          { className: "quality-" + passwordQuality },
           "Password ",
           __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
             "em",
             null,
             this.state.passwordHelp
           ),
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", ref: input => this.password = input, disabled: disableInput, onChange: e => this.rankPassword(e), autoFocus: true })
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", ref: input => this.password = input, disabled: disableInput, onChange: e => this.changedPassword(e), autoFocus: true })
         ),
         creatingNew ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "label",
-          null,
-          "Confirm Password",
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", ref: input => this.passwordConfirm = input, disabled: disableInput, onChange: e => this.rankPassword(e) })
+          { className: showConfirmWarning ? "quality-0" : "" },
+          "Confirm Password ",
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            "em",
+            null,
+            showConfirmWarning ? "Passwords do not match" : ""
+          ),
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("input", { type: "password", ref: input => this.passwordConfirm = input, disabled: disableInput, onChange: e => this.changedPassword(e) })
         ) : null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
           "button",

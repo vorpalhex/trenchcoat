@@ -15,6 +15,7 @@ class Unlock extends Component {
       passwordQuality: -1,
       passwordHelp: "",
       creatingNew: false,
+      invalidPasswordMatch: false,
     }
   }
 
@@ -28,6 +29,11 @@ class Unlock extends Component {
     this.props.attemptUnlock(this.password.value);
   }
 
+  changedPassword() {
+    this.rankPassword();
+    this.checkPasswordMatch();
+  }
+
   rankPassword() {
     const ranking = getPasswordRanking(this.password.value.length);
     this.setState({
@@ -36,13 +42,18 @@ class Unlock extends Component {
     });
   }
 
+  checkPasswordMatch() {
+    this.setState({ invalidPasswordMatch: this.state.creatingNew && this.passwordConfirm.value !== this.password.value });
+  }
+
   render() {
     const { status, appName } = this.props;
-    const { creatingNew } = this.state;
+    const { creatingNew, passwordQuality, invalidPasswordMatch } = this.state;
     const loading = status === "loading";
     const loaded = status === "loaded";
     const disableInput = loading || loaded;
-    const disableSubmit = loading || loaded || this.state.passwordQuality <= 0;
+    const disableSubmit = loading || loaded || passwordQuality <= 0 || invalidPasswordMatch;
+    const showConfirmWarning = invalidPasswordMatch && this.passwordConfirm.value.length;
     let formClass = "unlock";
     if (loaded) formClass += " animated slideOutRight";
     return (
@@ -50,16 +61,16 @@ class Unlock extends Component {
         <div className="animated slideInLeft">
           <h1>{appName}</h1>
 
-          <label className={"quality-" + this.state.passwordQuality}>
+          <label className={"quality-" + passwordQuality}>
             Password <em>{this.state.passwordHelp}</em>
-            <input type="password" ref={(input) => this.password = input} disabled={disableInput} onChange={(e) => this.rankPassword(e)} autoFocus />
+            <input type="password" ref={(input) => this.password = input} disabled={disableInput} onChange={(e) => this.changedPassword(e)} autoFocus />
           </label>
 
           {
             creatingNew
-              ? <label>
-                  Confirm Password
-                  <input type="password" ref={(input) => this.passwordConfirm = input} disabled={disableInput} onChange={(e) => this.rankPassword(e)} />
+              ? <label className={showConfirmWarning ? "quality-0" : ""}>
+                  Confirm Password <em>{showConfirmWarning ? "Should match" : ""}</em>
+                  <input type="password" ref={(input) => this.passwordConfirm = input} disabled={disableInput} onChange={(e) => this.changedPassword(e)} />
                 </label>
               : null
           }
