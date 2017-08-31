@@ -26,7 +26,7 @@ function loadJournal(password, cb) {
   return currentWrapper.decrypt(password, (err, journal)=>{
     if(err) return cb(err);
     currentPassword = password;
-    currentJournal = journal;
+    currentJournal = new JournalModel(journal);
 
     return cb(null, currentJournal);
   });
