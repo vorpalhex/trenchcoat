@@ -31,6 +31,7 @@ module.exports = class JournalWrapper {
     let result = cipher.update(this.payload, 'binary', 'utf8');
     result += cipher.final('utf8');
 
+    result = JSON.parse(result);
     return cb(null, result);
   }
 

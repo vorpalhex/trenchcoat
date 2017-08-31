@@ -6,10 +6,10 @@ module.exports = class Journal {
     this.version = '1.0';
 
     const entries = ( journalObject.entries && journalObject.entries.slice() ) || [];
-    entries.forEach( this.addEntry );
+    entries.forEach( (entry) => this.addEntry(entry) );
   }
   addEntry(entry) {
-    const journalEntry = new JournalEntry( entry )
+    const journalEntry = new JournalEntry( entry );
     this.entries.push( journalEntry );
     return journalEntry;
   }
