@@ -1,32 +1,64 @@
 import React, { Component } from 'react';
 import Unlock from './Unlock';
 import Journal from './Journal';
+import debounce from 'debounce';
 
 const appName = "Trenchcoat";
-const date = new Date();
-const dummyEntries = Array.from({length: 5}, (e, i) => {
-  return {
-    id: i,
-    title: "Foo " + i,
-    date: `${date.getMonth()+1}/${date.getDate() + i}/${date.getFullYear()}`,
-    body: "Bar" + i,
-  };
-});
 
 class App extends Component {
   constructor() {
     super();
+    this.newJournal = this.newJournal.bind(this);
     this.attemptUnlock = this.attemptUnlock.bind(this);
+    this.journalUpdated = debounce(this.journalUpdated.bind(this), 3000);
     this.state = {
-      entries: dummyEntries,
+      journal: false,
       locked: true,
       unlockerStatus: "visible",
     };
   }
 
-  attemptUnlock(password) {
-    // TODO Send password to backend to confirm unlock
+  newJournal(password) {
+    const journal = journalManager.newJournal(password);
+    this.setState({ journal });
     this.unlock();
+  }
+
+  journalUpdated() {
+    let badSave = error => {
+      console.error(error);
+    }
+    try {
+      journalManager.saveJournal((error) => {
+        if (error) {
+          badSave(error);
+        } else {
+          console.log('Journal saved!');
+        }
+      });
+    } catch (error) {
+      badSave(error);
+    }
+  }
+
+  attemptUnlock(password) {
+    this.setState({ unlockerStatus: "loading" });
+    let badDecrypt = error => {
+      this.setState({ unlockerStatus: "failed" });
+      console.warn('Thrown error during attemptUnlock, likely wrong password.', error);
+    };
+    try {
+      journalManager.loadJournal(password, (error, journal) => {
+        if (error) {
+          badDecrypt(error);
+        } else {
+          this.setState({ journal });
+          this.unlock();
+        }
+      });
+    } catch (error) {
+      badDecrypt(error);
+    }
   }
 
   lock() {
@@ -37,34 +69,28 @@ class App extends Component {
   }
 
   unlock() {
-    this.setState({ locked: false });
-    this.fetchEntries();
-  }
-
-  fetchEntries() {
-    // TODO fetch entries from backend
-    this.setState({ unlockerStatus: "loading" });
-    setTimeout(() => { // Arbitrary faking loading until backend is done
-      this.setState({ unlockerStatus: "loaded" });
-      setTimeout(() => {
-        this.setState(() => { unlockerStatus: "hide" });
-      }, 1000);
-    }, 2000);
+    this.setState({
+      locked: false,
+      unlockerStatus: "loaded"
+    });
+    setTimeout(() => { // Animated Slide Out
+      this.setState(() => { unlockerStatus: "hide" });
+    }, 1000);
   }
 
   render() {
-    const { unlockerStatus, locked, entries } = this.state;
+    const { unlockerStatus, locked, journal } = this.state;
     const hideUnlocker = unlockerStatus === "hide";
     return (
       <div className="app">
         {
           !locked
-          ? <Journal entries={entries} />
+          ? <Journal journal={journal} journalUpdated={this.journalUpdated} />
           : null
         }
         {
           !hideUnlocker
-            ? <Unlock appName={appName} status={unlockerStatus} attemptUnlock={this.attemptUnlock} />
+            ? <Unlock appName={appName} status={unlockerStatus} newJournal={this.newJournal} attemptUnlock={this.attemptUnlock} />
             : null
         }
       </div>

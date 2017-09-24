@@ -9,17 +9,39 @@ const passwordRankings = [
 const getPasswordRanking = (password) => passwordRankings.reduce((previous, current) => password >= current.length ? current : previous);
 
 class Unlock extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
+      failure: props.status === 'failed',
       passwordQuality: -1,
       passwordHelp: "",
+      creatingNew: false,
+      invalidPasswordMatch: false,
     }
   }
 
-  attemptUnlock(event) {
+  componentWillReceiveProps(props) {
+    this.setState({
+      failure: props.status === 'failed',
+    });
+  }
+
+  toggleForm(event) {
     event.preventDefault();
-    this.props.attemptUnlock(this.password.value);
+    this.setState({ creatingNew: !this.state.creatingNew });
+  }
+
+  formSubmit(event) {
+    event.preventDefault();
+    this.props[this.state.creatingNew ? "newJournal" : "attemptUnlock"](this.password.value);
+  }
+
+  changedPassword() {
+    this.rankPassword();
+    this.checkPasswordMatch();
+    this.setState({
+      failure: false,
+    });
   }
 
   rankPassword() {
@@ -30,27 +52,53 @@ class Unlock extends Component {
     });
   }
 
+  checkPasswordMatch() {
+    this.setState({ invalidPasswordMatch: this.state.creatingNew && this.passwordConfirm.value !== this.password.value });
+  }
+
   render() {
-    const { status } = this.props;
+    const { status, appName } = this.props;
+    const { creatingNew, passwordQuality, invalidPasswordMatch, failure } = this.state;
     const loading = status === "loading";
     const loaded = status === "loaded";
     const disableInput = loading || loaded;
-    const disableSubmit = loading || loaded || this.state.passwordQuality <= 0;
+    const disableSubmit = loading || loaded || passwordQuality <= 0 || invalidPasswordMatch;
+    const showConfirmWarning = invalidPasswordMatch && this.passwordConfirm.value.length;
     let formClass = "unlock";
     if (loaded) formClass += " animated slideOutRight";
     return (
-      <form className={formClass} onSubmit={(e) => this.attemptUnlock(e)}>
+      <form className={formClass} onSubmit={(e) => this.formSubmit(e)}>
         <div className="animated slideInLeft">
-          <h1>{this.props.appName}</h1>
+          <h1>{appName}</h1>
 
-          <label className={"quality-" + this.state.passwordQuality}>
-            Password <em>{this.state.passwordHelp}</em>
-            <input type="password" ref={(input) => this.password = input} disabled={disableInput} onChange={(e) => this.rankPassword(e)} autoFocus />
+          <label className={"quality-" + (failure ? "0" : passwordQuality)}>
+            {
+              failure
+                ? <span>Wrong Password :(</span>
+                : <span>Password <em>{this.state.passwordHelp}</em></span>
+            }
+            <input type="password" ref={(input) => this.password = input} disabled={disableInput} onChange={(e) => this.changedPassword(e)} autoFocus />
           </label>
+
+          {
+            creatingNew
+              ? <label className={showConfirmWarning ? "quality-0" : ""}>
+                  Confirm Password <em>{showConfirmWarning ? "Should match" : ""}</em>
+                  <input type="password" ref={(input) => this.passwordConfirm = input} disabled={disableInput} onChange={(e) => this.changedPassword(e)} />
+                </label>
+              : null
+          }
 
           <button type="submit" disabled={disableSubmit}>
             { loading ? "Loading..." : "Unlock" }
           </button>
+
+          <footer>
+            <br />
+            <a onClick={(e) => this.toggleForm(e)}>
+              { creatingNew ? "Load Existing Journal" : "Create New Journal" }
+            </a>
+          </footer>
         </div>
       </form>
     );

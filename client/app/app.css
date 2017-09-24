@@ -12,6 +12,10 @@ h1, h2, h3, h4, h5, h6 {
   font-family: ‘Times New Roman’, Times, serif;
 }
 
+a {
+  cursor: pointer;
+}
+
 .hide {
   display: none !important;
 }
@@ -64,7 +68,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .entry-link {
   color: #adadad;
-  cursor: pointer;
   width: 100%;
   display: inline-block;
 }
@@ -89,6 +92,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .column-writing {
   background-color: white;
+}
+
+.writing {
+  padding: 1rem;
 }
 
 .column-entries, .column-writing {
