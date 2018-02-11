@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com:vorpalhex/trenchcoat.git"
+  },
   "scripts": {
     "start": "./node_modules/.bin/electron .",
     "build": "webpack",
