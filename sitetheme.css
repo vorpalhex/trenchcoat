@@ -1,0 +1,27 @@
+html, body {
+  font-family: Verdana, Geneva, sans-serif;
+  background: #170a1f;
+  color: white;
+  text-align: center;
+}
+
+html, body, #root, .app,
+.journal, .journal > .row, .journal > .row > .column {
+  height: 100%;
+}
+
+h1 {
+  font-size: 80pt;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: ‘Times New Roman’, Times, serif;
+}
+
+a {
+  cursor: pointer;
+}
+
+.header {
+  margin-top: 5rem;
+}
